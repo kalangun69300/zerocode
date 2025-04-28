@@ -44,7 +44,7 @@ pipeline {
         stage('Analyze with Cov-Analyze') {
             steps {
                 script {
-                    sh "sudo  ${COVERITY_PATH}/cov-analyze --dir ${COVERITY_DIR} --all --webapp-security --distrust-all --strip-path=$(pwd) --jobs max4"  
+                    sh "sudo  ${COVERITY_PATH}/cov-analyze --dir ${COVERITY_DIR} --all --webapp-security --distrust-all --jobs max4"  
                 }
             }
         }
