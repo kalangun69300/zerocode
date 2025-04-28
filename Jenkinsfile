@@ -11,11 +11,11 @@ pipeline {
     }
 
     stages {
-        stage('Checkout Code from GitHub') {
-            steps {
-                checkout scm
-            }
-        }
+    //     stage('Checkout Code from GitHub') {
+    //         steps {
+    //             checkout scm
+    //         }
+    //     }
 
         stage('Build JAR') {
             steps {
@@ -44,7 +44,7 @@ pipeline {
         stage('Analyze with Cov-Analyze') {
             steps {
                 script {
-                    sh "sudo ${COVERITY_PATH}/cov-analyze --dir ${COVERITY_DIR} --all --webapp-security --distrust-all --strip-path=$(pwd) --jobs max4 --enable HARDCODED_CREDENTIALS"
+                    sh "sudo ${COVERITY_PATH}/cov-analyze --dir ${COVERITY_DIR} --all --webapp-security --distrust-all --jobs max4 --enable HARDCODED_CREDENTIALS"
                 }
             }
         }
