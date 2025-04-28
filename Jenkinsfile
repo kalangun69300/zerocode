@@ -40,7 +40,7 @@ pipeline {
         stage('Push Docker Image') {
             steps {
                 script {
-                    sh "docker push ${env.image_name}"
+                    sh "docker push ${DOCKER_IMAGE}"
                 }
             }
         }
