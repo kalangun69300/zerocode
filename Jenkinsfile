@@ -2,10 +2,29 @@ pipeline {
     agent { label 'slave01' }
 
     environment {
-        image_name = "hubdc.dso.local/test-image/zerocode-scan:latest"
+        image_name = "hubdc.dso.local/test-image/zerocode-scan"
+        IMAGE_TAG = "${BUILD_NUMBER}"    
+        DOCKER_IMAGE = "${IMAGE_NAME}:${IMAGE_TAG}"
     }
 
     stages {
+
+                stage('Build JAR') {
+            steps {
+                script {
+                    sh 'mvn clean package -DskipTests'
+                }
+            }
+        }
+
+        stage('Build Docker Image') {
+                    steps {
+                        script {
+                            sh "docker build -t ${DOCKER_IMAGE} ."
+                        }
+                    }
+                }
+
         stage('Login to Harbor') {
             steps {
                 script {
@@ -18,10 +37,10 @@ pipeline {
             }
         }
 
-        stage('Pull Docker Image') {
+        stage('Push Docker Image') {
             steps {
                 script {
-                    sh "docker pull ${env.image_name}"
+                    sh "docker push ${env.image_name}"
                 }
             }
         }
