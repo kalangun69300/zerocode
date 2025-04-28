@@ -11,11 +11,11 @@ pipeline {
     }
 
     stages {
-    //     stage('Checkout Code from GitHub') {
-    //         steps {
-    //             checkout scm
-    //         }
-    //     }
+        stage('Checkout Code from GitHub') {
+            steps {
+                checkout scm
+            }
+        }
 
         stage('Build JAR') {
             steps {
