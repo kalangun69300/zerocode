@@ -59,16 +59,6 @@ pipeline {
             }
         }
 
-        stage('Commit Defects to Coverity Server') {
-            steps {
-                script {
-                    withCredentials([usernamePassword(credentialsId: 'coverity-secret', passwordVariable: 'COVERITY_PASS', usernameVariable: 'COVERITY_USER')]) {
-                        sh "cov-commit-defects --dir ${COVERITY_DIR} --host 192.168.172.101 --user ${COVERITY_USER} --password ${COVERITY_PASS} --stream ${COVERITY_STREAM} --https-port=8443 --ssl --on-new-cert trust"
-                    }
-                }
-            }
-        }
-
         stage('Build Docker Image') {
             steps {
                 script {
