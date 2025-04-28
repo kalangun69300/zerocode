@@ -1,11 +1,12 @@
+pipeline {
     agent { label 'slave01' }
 
     environment {
-        IMAGE_NAME = "hubdc.dso.local/test-image/zerocode-scan"
-        IMAGE_TAG = "${BUILD_NUMBER}"
-        DOCKER_IMAGE = "${IMAGE_NAME}:${IMAGE_TAG}"
-        COVERITY_PATH = "/apps/devsecops/coverity/cov-analysis-linux64-2024.12.0/bin"
-        COVERITY_DIR = "/home/dsoadm01/gun/zerocode/zerocode-maven-archetype/target"
+        IMAGE_NAME      = "hubdc.dso.local/test-image/zerocode-scan"
+        IMAGE_TAG       = "${BUILD_NUMBER}"
+        DOCKER_IMAGE    = "${IMAGE_NAME}:${IMAGE_TAG}"
+        COVERITY_PATH   = "/apps/devsecops/coverity/cov-analysis-linux64-2024.12.0/bin"
+        COVERITY_DIR    = "/home/dsoadm01/gun/zerocode/zerocode-maven-archetype/target"
         COVERITY_STREAM = "zerocode-scan"
     }
 
@@ -29,9 +30,7 @@
         stage('Login to Harbor') {
             steps {
                 script {
-                    // ใช้ credentials เพื่อ login ไป Harbor
                     withCredentials([usernamePassword(credentialsId: 'harborhub', passwordVariable: 'DOCKER_PASS', usernameVariable: 'DOCKER_USER')]) {
-                        // Login to Harbor
                         sh "echo $DOCKER_PASS | docker login hubdc.dso.local -u $DOCKER_USER --password-stdin"
                     }
                 }
@@ -79,5 +78,5 @@
                 }
             }
         }
-    }  
+    }
 }
