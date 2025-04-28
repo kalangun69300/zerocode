@@ -2,7 +2,7 @@ pipeline {
     agent { label 'slave01' }
 
     environment {
-        image_name = "hubdc.dso.local/test-image/zerocode-scan"
+        IMAGE_NAME = "hubdc.dso.local/test-image/zerocode-scan"
         IMAGE_TAG = "${BUILD_NUMBER}"    
         DOCKER_IMAGE = "${IMAGE_NAME}:${IMAGE_TAG}"
     }
