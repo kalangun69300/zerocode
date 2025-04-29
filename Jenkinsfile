@@ -30,7 +30,7 @@ pipeline {
         stage('Build with Cov-Build') {
             steps {
                 script {
-                    sh "sudo ${COVERITY_PATH}/cov-build --dir ${COVERITY_DIR} mvn clean install -DskipTests"
+                    sh "${COVERITY_PATH}/cov-build --dir ${COVERITY_DIR} mvn clean install -DskipTests"
                 }
             }
         }
@@ -38,7 +38,7 @@ pipeline {
         stage('Analyze with Cov-Analyze') {
             steps {
                 script {
-                    sh "sudo ${COVERITY_PATH}/cov-analyze --dir ${COVERITY_DIR} --all --webapp-security --distrust-all --jobs max4"
+                    sh "${COVERITY_PATH}/cov-analyze --dir ${COVERITY_DIR} --all --webapp-security --distrust-all --jobs max4"
                 }
             }
         }
@@ -47,7 +47,7 @@ pipeline {
             steps {
                 script {
                     withCredentials([usernamePassword(credentialsId: 'coverity-secret', passwordVariable: 'COVERITY_PASS', usernameVariable: 'COVERITY_USER')]) {
-                    sh "echo $COVERITY_PASS | cov-commit-defects --dir ${COVERITY_DIR} --host 192.168.172.101 --user ${COVERITY_USER} --password-stdin --stream ${COVERITY_STREAM} --https-port=8443 --ssl --on-new-cert trust"
+                    sh "echo $COVERITY_PASS | cov-commit --dir ${COVERITY_DIR} --host 192.168.172.101 --user ${COVERITY_USER} --password-stdin --stream ${COVERITY_STREAM} --https-port=8443 --ssl --on-new-cert trust"
                     }
                 }
             }
