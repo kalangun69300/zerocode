@@ -30,7 +30,7 @@ pipeline {
         stage('Build with Cov-Build') {
             steps {
                 script {
-                    sh "${COVERITY_PATH}/cov-build --dir ${COVERITY_DIR} mvn clean install -DskipTests"
+                    sh "${COVERITY_PATH}/cov-build --dir ${WORKSPACE} mvn clean install -DskipTests"
                 }
             }
         }
@@ -38,7 +38,7 @@ pipeline {
         stage('Analyze with Cov-Analyze') {
             steps {
                 script {
-                    sh "${COVERITY_PATH}/cov-analyze --dir ${COVERITY_DIR} --all --webapp-security --distrust-all --jobs max4"
+                    sh "${COVERITY_PATH}/cov-analyze --dir ${WORKSPACE} --all --webapp-security --distrust-all --jobs max4"
                 }
             }
         }
@@ -47,7 +47,8 @@ pipeline {
             steps {
                 script {
                     withCredentials([usernamePassword(credentialsId: 'coverity-secret', passwordVariable: 'COVERITY_PASS', usernameVariable: 'COVERITY_USER')]) {
-                    sh "echo $COVERITY_PASS | cov-commit --dir ${COVERITY_DIR} --host 192.168.172.101 --user ${COVERITY_USER} --password-stdin --stream ${COVERITY_STREAM} --https-port=8443 --ssl --on-new-cert trust"
+                    // sh "echo $COVERITY_PASS | ${COVERITY_PATH}/cov-commit-defects --dir ${WORKSPACE} --host 192.168.172.101 --u ${COVERITY_USER} --password-stdin --stream ${COVERITY_STREAM} --https-port=8443 --ssl --on-new-cert trust"
+                    sh """${COVERITY_PATH}/cov-commit-defects --dir ${WORKSPACE} --url https://192.168.172.101:8443 --user ${COVERITY_USER} --password ${COVERITY_PASS} --stream ${COVERITY_STREAM}"""
                     }
                 }
             }
@@ -83,3 +84,4 @@ pipeline {
 
     }
 }
+
