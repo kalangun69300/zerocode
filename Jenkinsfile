@@ -6,7 +6,6 @@ pipeline {
         IMAGE_TAG = "${BUILD_NUMBER}"
         DOCKER_IMAGE = "${IMAGE_NAME}:${IMAGE_TAG}"
         COVERITY_PATH = "/apps/devsecops/coverity/cov-analysis-linux64-2024.12.0/bin"
-        COVERITY_DIR = "/home/dsoadm01/gun/zerocode/zerocode-maven-archetype/target"
         COVERITY_STREAM = "zerocode-scan"
     }
 
@@ -30,7 +29,7 @@ pipeline {
         stage('Build with Cov-Build') {
             steps {
                 script {
-                    sh "${COVERITY_PATH}/cov-build --dir ${WORKSPACE} mvn clean install -DskipTests"
+                    sh "${COVERITY_PATH}/cov-capture --dir ${WORKSPACE} mvn clean install -DskipTests"
                 }
             }
         }
